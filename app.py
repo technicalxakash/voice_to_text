@@ -3,7 +3,10 @@ import speech_recognition as sr
 
 st.title("🎤 Voice to Text Converter")
 
-if st.button("Start Recording"):
+# Create two buttons side by side
+col1, col2 = st.columns(2)
+
+if col1.button("🎙️ Start Recording"):
     r = sr.Recognizer()
     with sr.Microphone() as source:
         st.write("Listening...")
@@ -12,5 +15,10 @@ if st.button("Start Recording"):
         try:
             text = r.recognize_google(audio)
             st.success(f"Recognized Text: {text}")
-        except:
+        except sr.UnknownValueError:
             st.error("Could not understand audio.")
+        except sr.RequestError:
+            st.error("Could not connect to the speech recognition service.")
+
+if col2.button("⏹ Stop Recording"):
+    st.info("Recording stopped manually.")
